@@ -1,7 +1,4 @@
-// main.js
-
-// ----- HTML include 로더 -----
-// 각 페이지 안의 <div data-include="파일경로.html"> 를 찾아 불러옵니다.
+// ---------- 1) HTML include 로더 ----------
 async function includeHTML() {
   const includes = document.querySelectorAll('[data-include]');
   for (const el of includes) {
@@ -19,24 +16,56 @@ async function includeHTML() {
 
 
 
+// ---------- 2) 필터 함수 ----------
+function applyFilter(filter) {
+  const items = document.querySelectorAll(".item");
+
+  items.forEach(item => {
+    const category = item.getAttribute("data-category");
+
+    if (filter === "all" || category?.includes(filter)) {
+      item.style.display = "block";
+    } else {
+      item.style.display = "none";
+    }
+  });
+
+  document.querySelectorAll("[data-filter]").forEach(link => {
+    link.classList.toggle("is-active", link.getAttribute("data-filter") === filter);
+  });
+}
+
+
+
+// ---------- 3) DOM 로드 시작 ----------
 document.addEventListener('DOMContentLoaded', async () => {
-  
-// ① include 로더 실행 (모든 partial HTML을 먼저 불러옴)
+
+  // ① partial HTML 먼저 불러오기
   await includeHTML();
 
   const body = document.body;
 
 
 
+  // ===============================
+  // ⭐ 페이지 진입 Fade In
+  // ===============================
+  requestAnimationFrame(() => {
+    body.classList.add("page-loaded");
+  });
 
-  // ===== 메뉴 요소 (현재 마크업 존중) =====
-  const expandCheckbox = document.getElementById('expand-menu'); // 모바일 토글
-  const foldingWrap    = document.querySelector('.menu-folding');   // 모바일용 컨테이너
-  const unfoldingWrap  = document.querySelector('.menu-unfolding'); // 데스크탑용 컨테이너
+
+
+  // ===============================
+  // 메뉴 제어
+  // ===============================
+
+  const expandCheckbox = document.getElementById('expand-menu');
+  const foldingWrap    = document.querySelector('.menu-folding');
+  const unfoldingWrap  = document.querySelector('.menu-unfolding');
   const menuListMobile = foldingWrap?.querySelector('ul');
   const menuListDesk   = unfoldingWrap?.querySelector('ul');
 
-  // ===== 1) 모바일 메뉴 바깥 클릭/ESC 닫기 + 바디 스크롤 잠금 =====
   const closeMenu = () => {
     if (expandCheckbox && expandCheckbox.checked) {
       expandCheckbox.checked = false;
@@ -44,37 +73,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  // 체크 상태 변화에 따라 body 잠금 토글
   if (expandCheckbox) {
     expandCheckbox.addEventListener('change', () => {
       body.classList.toggle('nav-open', expandCheckbox.checked);
     });
   }
 
-  // 바깥 클릭 시 닫기
   document.addEventListener('click', (e) => {
     if (!expandCheckbox || !expandCheckbox.checked) return;
     const menuArea = foldingWrap || document.body;
     if (!menuArea.contains(e.target)) closeMenu();
   });
 
-  // ESC 닫기
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeMenu();
   });
 
-  // 리사이즈 시에도 상태 정리(데스크탑 전환 등)
-  const BREAKPOINT = 1100; // CSS 미디어쿼리와 동일
+  const BREAKPOINT = 1100;
   const onResize = () => {
-    if (window.innerWidth > BREAKPOINT) {
-      // 데스크탑에서는 모바일 토글 강제 닫힘
-      closeMenu();
-    }
+    if (window.innerWidth > BREAKPOINT) closeMenu();
   };
   window.addEventListener('resize', onResize);
   onResize();
 
-  // ===== 2) 현재 페이지 활성 링크 표시 (모바일/데스크탑 메뉴 모두) =====
+
+
+  // ===============================
+  // 현재 페이지 활성 표시
+  // ===============================
+
   const markActiveLinks = (scope) => {
     if (!scope) return;
     const here = location.pathname.replace(/\/+$/, '');
@@ -87,30 +114,127 @@ document.addEventListener('DOMContentLoaded', async () => {
       } catch (_) {}
     });
   };
+
   markActiveLinks(menuListMobile);
   markActiveLinks(menuListDesk);
 
-  // ===== 3) (옵션) 키보드 포커스 트랩: 모바일 메뉴 펼친 동안 포커스가 메뉴 안에 머물게 =====
-  if (menuListMobile && expandCheckbox) {
-    menuListMobile.addEventListener('keydown', (e) => {
-      if (!expandCheckbox.checked || e.key !== 'Tab') return;
-      const focusables = menuListMobile.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
-      if (!focusables.length) return;
-      const first = focusables[0];
-      const last  = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault(); last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault(); first.focus();
-      }
-    });
+
+
+  // ===============================
+  // URL 파라미터 필터 적용
+  // ===============================
+
+  const params = new URLSearchParams(window.location.search);
+  const category = params.get("category");
+
+  if (category) {
+    applyFilter(category);
+  } else {
+    applyFilter("all");
   }
 
-  // ===== 4) shop 전용: 구매 링크만 새 탭 (원하면 유지) =====
+
+
+//로딩 애니메이션 효과
+
+const items = document.querySelectorAll(".item");
+const images = document.querySelectorAll(".item img");
+
+let loadedCount = 0;
+
+images.forEach(img => {
+  if (img.complete) {
+    loadedCount++;
+  } else {
+    img.addEventListener("load", () => {
+      loadedCount++;
+      if (loadedCount === images.length) startAnimation();
+    });
+  }
+});
+
+if (loadedCount === images.length) {
+  startAnimation();
+}
+
+function startAnimation() {
+  const visibleItems = document.querySelectorAll(".item:not([style*='display: none'])");
+
+  visibleItems.forEach((item, index) => {
+    setTimeout(() => {
+      item.classList.add("loaded");
+    }, index * 80);
+  });
+}
+
+
+
+
+  // ===============================
+  // 필터 클릭 이벤트
+  // ===============================
+
+  document.addEventListener("click", function (e) {
+    const filter = e.target.getAttribute("data-filter");
+    if (!filter) return;
+
+    e.preventDefault();
+    applyFilter(filter);
+    history.pushState(null, "", `?category=${filter}`);
+  });
+
+
+
+  // ===============================
+  // 뒤로가기(popstate)
+  // ===============================
+
+  window.addEventListener("popstate", () => {
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get("category") || "all";
+    applyFilter(category);
+  });
+
+
+
+  // ===============================
+  // ⭐ 페이지 이동 Fade Out
+  // ===============================
+
+  document.addEventListener("click", function (e) {
+
+    const link = e.target.closest("a");
+    if (!link) return;
+
+    const url = link.getAttribute("href");
+    if (!url) return;
+
+    // 필터용 URL은 제외
+    if (url.startsWith("?")) return;
+
+    // 외부링크 제외
+    if (url.startsWith("http") || url.startsWith("mailto") || url.startsWith("#")) return;
+
+    e.preventDefault();
+
+    body.classList.remove("page-loaded");
+
+    setTimeout(() => {
+      window.location.href = url;
+    }, 400);
+  });
+
+
+
+  // ===============================
+  // shop 페이지 외부 구매 링크 새탭
+  // ===============================
+
   if (body.classList.contains('shop-page')) {
     document.querySelectorAll('a.buy').forEach(link => {
       link.setAttribute('target', '_blank');
       link.setAttribute('rel', 'noopener noreferrer');
     });
   }
+
 });
