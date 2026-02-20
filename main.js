@@ -1,3 +1,4 @@
+
 // ---------- 1) HTML include 로더 ----------
 async function includeHTML() {
   const includes = document.querySelectorAll('[data-include]');
@@ -223,6 +224,8 @@ function startAnimation() {
       window.location.href = url;
     }, 400);
   });
+
+
 
 
 

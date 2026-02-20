@@ -55,6 +55,9 @@
 
 
 
+
+
+
 body{
    font-size: 18px;
    padding: 0px;
@@ -603,12 +606,6 @@ text-align: center;
   transform: translateY(0);
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
-
-
-
-
-
-
 
 
 
