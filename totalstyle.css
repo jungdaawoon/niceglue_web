@@ -510,8 +510,8 @@ text-align: center;
   }
 
 
-.left-menu, .right-menu { gap: 16px; }
-  li a { font-size: 11px; }
+.left-menu, .right-menu { gap: 10px; }
+  li a { font-size: 10px; }
 
 /*모바일에서 괄호안의 메뉴 안보이게하기*/
 .category-group {
