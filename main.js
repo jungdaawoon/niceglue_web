@@ -136,37 +136,42 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-//로딩 애니메이션 효과
-
+// ===============================
+// 로딩 애니메이션 효과 (개선)
+// - 모든 이미지 기다리지 않고 "각 item 단위"로 표시
+// ===============================
 const items = document.querySelectorAll(".item");
 const images = document.querySelectorAll(".item img");
 
-let loadedCount = 0;
+let index = 0;
 
 images.forEach(img => {
+  const item = img.closest(".item");
+  if (!item) return;
+
+  const reveal = () => {
+    // display:none(필터로 숨긴 것) 제외
+    if (item.style.display === "none") return;
+
+    const delay = index * 40; // 80 → 40 정도로 줄이면 더 민첩
+    index++;
+
+    setTimeout(() => item.classList.add("loaded"), delay);
+  };
+
   if (img.complete) {
-    loadedCount++;
+    reveal();
   } else {
-    img.addEventListener("load", () => {
-      loadedCount++;
-      if (loadedCount === images.length) startAnimation();
-    });
+    img.addEventListener("load", reveal, { once: true });
+    img.addEventListener("error", reveal, { once: true }); // 깨진 이미지도 멈추지 않게
   }
 });
 
-if (loadedCount === images.length) {
-  startAnimation();
-}
-
-function startAnimation() {
-  const visibleItems = document.querySelectorAll(".item:not([style*='display: none'])");
-
-  visibleItems.forEach((item, index) => {
-    setTimeout(() => {
-      item.classList.add("loaded");
-    }, index * 80);
-  });
-}
+// ✅ 이미지가 없는 item도 즉시 표시(있을 수 있으면)
+items.forEach(item => {
+  const hasImg = item.querySelector("img");
+  if (!hasImg) item.classList.add("loaded");
+});
 
 
 
