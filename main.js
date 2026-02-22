@@ -180,14 +180,14 @@ items.forEach(item => {
   // 필터 클릭 이벤트
   // ===============================
 
-  document.addEventListener("click", function (e) {
-    const filter = e.target.getAttribute("data-filter");
-    if (!filter) return;
+  // document.addEventListener("click", function (e) {
+  //   const filter = e.target.getAttribute("data-filter");
+  //   if (!filter) return;
 
-    e.preventDefault();
-    applyFilter(filter);
-    history.pushState(null, "", `?category=${filter}`);
-  });
+  //   e.preventDefault();
+  //   applyFilter(filter);
+  //   history.pushState(null, "", `?category=${filter}`);
+  // });
 
 
 
