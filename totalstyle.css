@@ -592,7 +592,35 @@ text-align: center;
   }
 }
 
+
+/* =============================== */
+/* 📱 Phone 전용 (핵심) */
+/* =============================== */
+@media only screen and (max-width: 640px){
+
+  ul {
+    gap: clamp(6px, 2vw, 12px);
+    padding: 2.5vw 3vw;
+  }
+
+  li a {
+    font-size: clamp(9.5px, 2.8vw, 11px);
+    padding: 2px 0;
+    letter-spacing: -0.01em;
+  }
+
+  /* 괄호 그룹 더 타이트 */
+  .category-group {
+    letter-spacing: -0.02em;
+  }
+
+}
 /* 미디어퀴리 끝 */
+
+
+
+
+
 
 
 /* ============================= */
