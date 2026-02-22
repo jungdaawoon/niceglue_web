@@ -109,11 +109,11 @@ p{
 }
 
 p:lang(ko) {
-  word-break: keep-all;   /* 한글은 공백 단위로만 줄바꿈 */
-  line-break: loose;      /* 한글 문장부호 줄바꿈 품질 개선(지원 브라우저에서) */
+  word-break: keep-all;
+  line-break: loose;
   overflow-wrap: anywhere;
 
-  font-size: 18px;
+  /* font-size: 12px; */
   line-height: 1.6;
   letter-spacing: -0.02em;
 }
@@ -518,7 +518,7 @@ text-align: center;
 .description,.footer{
   position: relative;
   float:left;
-  padding: 0 5vw;   /* 🔥 nav와 동일하게 */
+  width: 90vw;
   box-sizing: border-box;
   margin: 2vw 0px;
   
@@ -567,6 +567,8 @@ text-align: center;
 }
 
 
+
+
 /* =============================== */
 /* 📱 Phone 전용 (핵심) */
 /* =============================== */
@@ -610,20 +612,6 @@ text-align: center;
 }
 
 
-
-p{
-  font-size: 12px;
-}
-
-p:lang(ko) {
-  word-break: keep-all;   /* 한글은 공백 단위로만 줄바꿈 */
-  line-break: loose;      /* 한글 문장부호 줄바꿈 품질 개선(지원 브라우저에서) */
-  overflow-wrap: anywhere;
-
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: -0.02em;
-}  
 
 
 /*어바웃 리스트 행간 설정*/
