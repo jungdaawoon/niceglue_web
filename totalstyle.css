@@ -77,8 +77,7 @@ body{
 :lang(ko) {
 
   font-family: 'Spoqa Han Sans Neo', sans-serif;
-  line-height: 1.4;       /* 한글은 약간 넉넉한 행간 권장 */
-  letter-spacing: -0.02em; /* 한글 자간 소폭 축소 */
+
 }
 
 
@@ -106,7 +105,7 @@ height: auto;
 }
 
 p{
-  margin: 0px 0px 15px 0px;
+
 }
 
 p:lang(ko) {
@@ -117,7 +116,6 @@ p:lang(ko) {
   font-size: 18px;
   line-height: 1.6;
   letter-spacing: -0.02em;
- /* letter-spacing: 0em;*/
 }
 
 
@@ -131,11 +129,9 @@ p.title{
 }
 
 p.title:lang(ko) {
-  /* 영문 27pt/line-height:1.0 맞춤 */
-  font-family: 'Noto Sans KR', sans-serif;
   font-size: 27pt;
   line-height: 1.15;   /* 한글은 너무 붙지 않게 살짝 벌림 */
-  letter-spacing: -0.02em;
+  
 }
 
 
@@ -193,14 +189,6 @@ a:hover {
 
 }*/
 
-/* mailto 링크(이메일)만 밑줄 제거 */
-a[href^="mailto:"] {
-  text-decoration: none !important;
-}
-
-a[href^="mailto:"]:hover {
-  text-decoration: none !important;
-}
 
 
 ul {
@@ -310,16 +298,6 @@ li a {
 }
 
 
-
-/*.about-text {
-
-  padding: 0px 0.5vw 10px 1.5vw;
-
-  max-width: 600px;
-  position: relative;
-  font-weight:normal;
-}
-*/
 
 
 .about-container {
@@ -500,9 +478,9 @@ text-align: center;
 @media only screen and (max-width: 1100px){
 
 .thumnail1, .thumnail2, .thumnail3, .thumnail4, .thumnail5, .thumnail6{ 
- width: 90vw;
  margin: 0px;
- padding: 5px;
+ width: 100%;
+ padding: 0 5vw;   /* 🔥 nav와 동일하게 */
 }
 
 
@@ -514,7 +492,7 @@ text-align: center;
 
 
 .left-menu, .right-menu { gap: 10px; }
-  li a { font-size: 12px; }
+  /* li a { font-size: 12px; } */
 
 /*모바일에서 괄호안의 메뉴 안보이게하기*/
 .category-group {
@@ -540,9 +518,9 @@ text-align: center;
 .description,.footer{
   position: relative;
   float:left;
-  width: 90vw;
+  padding: 0 5vw;   /* 🔥 nav와 동일하게 */
+  box-sizing: border-box;
   margin: 2vw 0px;
-  padding: 5px;
   
 }
 
@@ -552,10 +530,12 @@ text-align: center;
 }
 
  .about-container {
-    display: flex;        /* grid → flex로 변경 */
-    flex-direction: column;
-    width: 90vw;
-    gap: 10px;
+   display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 5vw;   /* 🔥 nav와 동일하게 */
+  gap: 10px;
+  box-sizing: border-box;
   }
 
 
@@ -576,12 +556,6 @@ text-align: center;
 .en-contact-bottom{ order: 8; }
 
 
-/*about에 있는 학력부분 인덴트*/
-/*.indent{
-  text-indent: -0.7em;
-  margin-left: 1.5em;
-}
-*/
 
 
 /*poster-housing 부분에 있는 인덴트*/
@@ -596,15 +570,15 @@ text-align: center;
 /* =============================== */
 /* 📱 Phone 전용 (핵심) */
 /* =============================== */
-@media only screen and (max-width: 640px){
+@media only screen and (max-width: 540px){
 
   ul {
-    gap: clamp(6px, 2vw, 12px);
+    gap: clamp(6px, 1.4vw, 10px);
     padding: 2.5vw 3vw;
   }
 
   li a {
-    font-size: clamp(9.5px, 2.8vw, 11px);
+    font-size: clamp(10.5px, 3.5vw, 16px);
     padding: 2px 0;
     letter-spacing: -0.01em;
   }
@@ -613,6 +587,59 @@ text-align: center;
 .category-group {
     display: none;
   }
+
+
+
+.about-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 3vw;   /* 🔥 nav와 동일하게 */
+  row-gap:0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-size: 12px;
+  }
+
+
+.about-container p,
+.about-container dl,
+/* .about-container dt, */
+/* .about-container dd { */
+  margin-block: 0.45em;
+}
+
+
+
+p{
+  font-size: 12px;
+}
+
+p:lang(ko) {
+  word-break: keep-all;   /* 한글은 공백 단위로만 줄바꿈 */
+  line-break: loose;      /* 한글 문장부호 줄바꿈 품질 개선(지원 브라우저에서) */
+  overflow-wrap: anywhere;
+
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+}  
+
+
+/*어바웃 리스트 행간 설정*/
+.about-container dt {
+  /*line-height: 3.4;*/   /* 제목은 조금 타이트 */
+/*  margin-top: 28px;*/
+margin-bottom: 5px;
+}
+
+.about-container dd {
+  line-height: 1.6;  /* 항목은 넉넉 */
+  margin-left: 10px; /*리스트 들여쓰기*/
+
+}
+
+
 
 }
 /* 미디어퀴리 끝 */
